@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programme IA — suivi sur 24 semaines</title>
+<meta name="description" content="Suivi de progression du programme de préparation à l’IA : 24 semaines, 240 heures.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#eef2f6; --grid:#dbe3ec; --ink:#14213d; --pencil:#5a6878; --card:#fbfcfd;
+  --line:#c5d0dc; --mark:#ffd23f; --ok:#1f8f63; --ok-soft:#d6efe4; --danger:#b3372f;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{--paper:#0f1724; --grid:#182335; --ink:#e8edf4; --pencil:#93a1b3; --card:#16202f;
+        --line:#2b3a50; --mark:#e6b800; --ok:#4cc995; --ok-soft:#173a2e; --danger:#ff7a70;}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--body);color:var(--ink);line-height:1.55;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px}
+.wrap{max-width:980px;margin:0 auto;padding:28px 18px 80px}
+h1,h2,h3{font-family:var(--display);line-height:1.1;margin:0}
+a{color:var(--ink)}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
+nav{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.9rem;margin-bottom:26px}
+nav a{color:var(--pencil);text-decoration:none;border-bottom:1px solid var(--line)}
+nav a:hover{color:var(--ink);border-color:var(--ink)}
+
+.hero h1{font-size:clamp(2.2rem,7vw,4.2rem);font-weight:800;letter-spacing:-.03em}
+.hero h1 span{background:linear-gradient(transparent 62%,var(--mark) 62% 92%,transparent 92%);padding:0 .1em}
+.sub{color:var(--pencil);margin:12px 0 0;max-width:60ch}
+.figure{margin:24px 0 0;background:var(--card);border:1.5px solid var(--ink);padding:14px 14px 10px}
+.figure svg{width:100%;height:auto;display:block}
+.figure figcaption{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.88rem;color:var(--pencil);margin-top:8px}
+.figure figcaption b{color:var(--ink)}
+.key i{display:inline-block;width:22px;height:0;border-top:3px solid var(--ok);vertical-align:middle;margin-right:6px}
+.key.ideal i{border-top:2px dashed var(--pencil)}
+.stats{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:16px;font-size:1.02rem}
+.stats b{font-family:var(--display);font-size:1.5rem;margin-right:4px}
+
+section{margin-top:54px}
+section>h2{font-size:1.9rem;font-weight:700;letter-spacing:-.02em;margin-bottom:6px}
+.lead{color:var(--pencil);margin:0 0 18px;max-width:62ch}
+
+.today{background:var(--card);border:1.5px solid var(--ink);border-left:10px solid var(--mark);padding:16px 18px}
+.today h3{font-size:1.4rem;margin-bottom:10px}
+
+.month{background:var(--card);border:1.5px solid var(--line);margin-bottom:14px}
+.month>header{padding:14px 16px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;border-bottom:1.5px solid var(--line)}
+.month h3{font-size:1.2rem;font-weight:700}
+.meter{display:flex;align-items:center;gap:10px;font-size:.88rem;color:var(--pencil)}
+.bar{width:120px;height:8px;background:var(--grid);border:1px solid var(--line)}
+.bar>i{display:block;height:100%;background:var(--ok)}
+.deliv{padding:10px 16px;font-size:.92rem;border-bottom:1.5px solid var(--line);background:color-mix(in srgb,var(--mark) 12%,var(--card))}
+.deliv label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+input[type=checkbox]{width:19px;height:19px;accent-color:var(--ok);flex:none;margin-top:3px}
+
+.week{padding:12px 16px;border-bottom:1px solid var(--line)}
+.week:last-child{border-bottom:0}
+.week.current{box-shadow:inset 6px 0 0 var(--mark)}
+.wrow{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.wtitle{font-weight:600}
+.wtitle small{display:block;font-weight:400;color:var(--pencil);font-size:.82rem}
+.days{display:flex;gap:6px}
+.day{font:600 .82rem var(--body);min-width:54px;padding:8px 4px;border:1.5px solid var(--ink);background:var(--card);color:var(--ink);cursor:pointer;transition:background .12s}
+.day:hover{background:var(--grid)}
+.day[aria-pressed=true]{background:var(--ok);border-color:var(--ok);color:#fff}
+@media (prefers-color-scheme:dark){.day[aria-pressed=true]{color:#06150e}}
+.day.big{min-width:0;flex:1;padding:12px 6px;text-align:left}
+.day.big span{display:block;font-weight:400;font-size:.78rem;opacity:.85}
+.daysbig{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+details.note{margin-top:8px}
+details.note summary{cursor:pointer;color:var(--pencil);font-size:.86rem}
+textarea,input[type=text],input[type=url],input[type=date]{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1.5px solid var(--line);padding:9px 10px}
+textarea{min-height:84px;resize:vertical;margin-top:6px}
+
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.box{background:var(--card);border:1.5px solid var(--line);padding:14px 16px}
+.proj{display:grid;gap:8px}
+.proj label.t{display:flex;gap:10px;font-weight:600;cursor:pointer}
+.proj small{color:var(--pencil);display:block;font-weight:400}
+.checks{display:grid;gap:8px}
+.checks label{display:flex;gap:10px;cursor:pointer}
+.checks label.done span{color:var(--pencil);text-decoration:line-through}
+
+.add{display:flex;gap:8px;margin-bottom:14px}
+.btn{font:600 .92rem var(--body);padding:9px 14px;border:1.5px solid var(--ink);background:var(--ink);color:var(--paper);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.warn{background:transparent;color:var(--danger);border-color:var(--danger)}
+.err{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
+.err .txt{flex:1}.err.done .txt{color:var(--pencil);text-decoration:line-through}
+.err small{display:block;color:var(--pencil)}
+.x{background:none;border:0;color:var(--pencil);font-size:1.2rem;cursor:pointer;line-height:1}
+.empty{color:var(--pencil);margin:0}
+
+.sched{width:100%;border-collapse:collapse;font-size:.94rem}
+.sched td{padding:8px 10px;border-bottom:1px solid var(--line)}
+.sched td:first-child{font-weight:600;width:110px}
+.sched td:last-child{text-align:right;color:var(--pencil);width:60px}
+ul.res{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+ul.res small{color:var(--pencil)}
+.tips{margin:0;padding-left:20px}.tips li{margin-bottom:6px}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.tools label{display:grid;gap:4px;font-size:.88rem;color:var(--pencil)}
+footer{margin-top:50px;color:var(--pencil);font-size:.84rem;max-width:70ch}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav aria-label="Sections">
+  <a href="#semaine">Cette semaine</a><a href="#plan">Les 24 semaines</a><a href="#projets">Projets</a>
+  <a href="#dossier">Dossier</a><a href="#erreurs">Carnet d’erreurs</a><a href="#ressources">Ressources</a><a href="#reglages">Réglages</a>
+</nav>
+
+<header class="hero">
+  <h1>24 semaines pour <span>l’IA</span></h1>
+  <p class="sub">Dix heures par semaine, du lundi au vendredi. Coche chaque séance terminée : la courbe verte montre où tu en es, la ligne en pointillés où tu devrais être.</p>
+  <figure class="figure">
+    <div id="chart"></div>
+    <figcaption>
+      <span class="key"><i></i>Ta progression</span>
+      <span class="key ideal"><i></i>Rythme prévu</span>
+      <span id="gap"></span>
+    </figcaption>
+  </figure>
+  <div class="stats" id="stats"></div>
+</header>
+
+<section id="semaine">
+  <h2>Cette semaine</h2>
+  <div class="today" id="today"></div>
+</section>
+
+<section id="plan">
+  <h2>Les 24 semaines</h2>
+  <p class="lead">Chaque semaine compte cinq séances de deux heures. Ouvre les notes d’une semaine pour écrire ce que tu as compris et ce qui bloque.</p>
+  <div id="months"></div>
+</section>
+
+<section id="projets">
+  <h2>Projets</h2>
+  <p class="lead">Un projet terminé, c’est un dépôt GitHub avec le problème, les données, la méthode, les métriques, les résultats et les limites.</p>
+  <div class="grid2" id="projects"></div>
+</section>
+
+<section id="dossier">
+  <h2>Projet final et dossier</h2>
+  <div class="grid2">
+    <div class="box"><h3 style="font-size:1.1rem;margin-bottom:10px">Projet final</h3><div class="checks" id="final"></div></div>
+    <div class="box"><h3 style="font-size:1.1rem;margin-bottom:10px">Dossier de candidature</h3><div class="checks" id="dossierList"></div></div>
+  </div>
+  <p class="lead" style="margin-top:14px">Vérifie les critères, les tests d’anglais, les dates et les financements sur les sites officiels :
+    <a href="https://www.cs.stanford.edu/admissions/masters-admissions" target="_blank" rel="noopener">admissions master Stanford CS</a>,
+    <a href="https://cs229.stanford.edu/" target="_blank" rel="noopener">CS229</a>.</p>
+</section>
+
+<section id="erreurs">
+  <h2>Carnet d’erreurs</h2>
+  <p class="lead">Note chaque notion mal comprise. Coche-la quand tu sais l’expliquer sans aide.</p>
+  <div class="add"><input type="text" id="errIn" placeholder="Ex. : je confond dérivée partielle et dérivée totale" aria-label="Nouvelle notion à reprendre"><button class="btn" id="errAdd">Ajouter</button></div>
+  <div id="errList"></div>
+</section>
+
+<section id="ressources">
+  <h2>Ressources et méthode</h2>
+  <div class="grid2">
+    <div class="box"><h3 style="font-size:1.1rem;margin-bottom:10px">Rythme hebdomadaire</h3>
+      <table class="sched" id="sched"></table></div>
+    <div class="box"><h3 style="font-size:1.1rem;margin-bottom:10px">Ressources gratuites</h3>
+      <ul class="res">
+        <li><a href="https://www.khanacademy.org/math" target="_blank" rel="noopener">Khan Academy</a> <small>maths, probabilités, statistiques</small></li>
+        <li><a href="https://www.3blue1brown.com/" target="_blank" rel="noopener">3Blue1Brown</a> <small>algèbre linéaire et calcul en images</small></li>
+        <li><a href="https://cs50.harvard.edu/x/" target="_blank" rel="noopener">CS50</a> <small>programmation et bases de l’informatique</small></li>
+        <li><a href="https://see.stanford.edu/" target="_blank" rel="noopener">Stanford Engineering Everywhere</a> <small>cours universitaires</small></li>
+        <li><a href="https://pytorch.org/tutorials/" target="_blank" rel="noopener">PyTorch Tutorials</a> <small>introduction au deep learning</small></li>
+        <li><a href="https://numpy.org/learn/" target="_blank" rel="noopener">NumPy</a> <small>documentation officielle</small></li>
+        <li><a href="https://scikit-learn.org/stable/" target="_blank" rel="noopener">scikit-learn</a> <small>documentation et guides</small></li>
+      </ul></div>
+    <div class="box"><h3 style="font-size:1.1rem;margin-bottom:10px">Conseils de travail</h3>
+      <ul class="tips">
+        <li>Fais les exercices à la main avant de regarder la correction.</li>
+        <li>Code chaque semaine, pas seulement des vidéos.</li>
+        <li>Garde notebooks, scripts et comptes rendus dans un dépôt GitHub propre.</li>
+        <li>Comprends et sache défendre chaque partie de tes projets.</li>
+      </ul></div>
+  </div>
+</section>
+
+<section id="reglages">
+  <h2>Réglages</h2>
+  <div class="box">
+    <div class="tools">
+      <label>Premier jour du programme<input type="date" id="start"></label>
+      <button class="btn ghost" id="exp">Exporter (JSON)</button>
+      <button class="btn ghost" id="impBtn">Importer</button>
+      <input type="file" id="imp" accept="application/json" hidden>
+      <button class="btn warn" id="reset">Tout effacer</button>
+    </div>
+    <p class="lead" style="margin:12px 0 0">Les données restent dans ce navigateur. Exporte-les de temps en temps pour garder une sauvegarde ou changer d’appareil.</p>
+  </div>
+</section>
+
+<footer>Préparation personnelle : elle ne garantit ni admission ni bourse. CS229 sert de repère pour les prérequis en algèbre linéaire, probabilités, statistiques, calcul et programmation.</footer>
+</div>
+
+<script>
+const DAYS=[["Lun","Maths","Cours, exemples, exercices"],["Mar","Python","Pratique et petits scripts"],["Mer","Maths+","Approfondissement, problèmes"],["Jeu","Info / IA","Théorie et implémentation"],["Ven","Projet","Projet, révision, bilan"]];
+const MONTHS=[
+ {t:"Mois 1 — Fondamentaux mathématiques et Python",d:"Résoudre des exercices de base et écrire des programmes Python simples sans dépendre d’un tutoriel.",w:[[1,"Fonctions, équations et Python de base"],[2,"Dérivées, limites et fonctions Python"],[3,"Vecteurs, matrices et NumPy"],[4,"Révision et évaluation du premier mois"]]},
+ {t:"Mois 2 — Algèbre linéaire, probabilités et statistiques",d:"Comprendre les notions mathématiques des modèles d’apprentissage automatique et analyser un jeu de données.",w:[[5,"Matrices, déterminants et produits scalaires"],[6,"Valeurs propres et vecteurs propres"],[7,"Probabilités et événements"],[8,"Espérance, variance et évaluation"]]},
+ {t:"Mois 3 — Calcul différentiel et data science",d:"Présenter une analyse reproductible, expliquer les données et justifier les choix.",w:[[9,"Pandas et nettoyage de données"],[10,"Visualisation et analyse exploratoire"],[11,"Dérivées partielles et gradient"],[12,"Mini-projet agricole"]]},
+ {t:"Mois 4 — Machine learning",d:"Entraîner et évaluer plusieurs modèles, comparer leurs performances et expliquer leurs limites.",w:[[13,"Régression linéaire et logistique"],[14,"Classification et arbres de décision"],[15,"Random Forest et validation"],[16,"Évaluation du projet machine learning"]]},
+ {t:"Mois 5 — Deep learning",d:"Construire un modèle neuronal simple, suivre son entraînement et évaluer ses résultats.",w:[[17,"Perceptrons et réseaux de neurones"],[18,"Fonctions d’activation et backpropagation"],[19,"PyTorch et entraînement"],[20,"Mini-projet deep learning"]]},
+ {t:"Mois 6 — Projet final et préparation académique",d:"Présenter un projet complet et vérifiable, avec code, documentation, résultats et limites.",w:[[21,"Conception du projet final"],[22,"Développement et entraînement du modèle"],[23,"API, tests et documentation"],[24,"Présentation finale et préparation académique"]]}
+];
+const WEEKS=MONTHS.flatMap((m,mi)=>m.w.map(([n,t])=>({n,t,mi})));
+const PROJECTS=[["p1","Mini-projet 1 — analyse de données agricoles","Semaine 12 · première prédiction simple"],["p2","Mini-projet 2 — système de prédiction","Semaine 16 · scikit-learn"],["p3","Mini-projet 3 — classification d’images ou de textes","Semaine 20 · PyTorch"],["p4","Projet final — application IA avec API","Semaines 21 à 24 · publié sur GitHub"]];
+const FINAL=["Problème utile défini","Jeu de données choisi","Méthode d’évaluation établie","Modèle entraîné","API créée et testée","Code documenté","Publié sur GitHub (README, installation, résultats, limites)"];
+const DOSSIER=["CV académique","Relevés de notes","Lettres de recommandation","Statement of Purpose","Test d’anglais vérifié","Dates et financements vérifiés"];
+const KEY="programme-ia-suivi-v1";
+
+function monday(d){const x=new Date(d);x.setHours(0,0,0,0);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);return x}
+function iso(d){const p=n=>String(n).padStart(2,"0");return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())}
+function fresh(){return{start:iso(monday(new Date())),s:{},notes:{},mdone:{},proj:{},final:{},dossier:{},errs:[]}}
+let S;
+try{S=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){S=fresh()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const open=new Set();
+
+function sessions(n){return(S.s[n]||[]).filter(Boolean).length}
+function currentWeek(){
+  const st=new Date(S.start+"T00:00:00");const d=Math.floor((Date.now()-st.getTime())/864e5);
+  return Math.max(1,Math.min(24,Math.floor(d/7)+1));
+}
+function started(){return Date.now()>=new Date(S.start+"T00:00:00").getTime()}
+
+function chart(cur){
+  const W=640,H=250,L=44,R=14,T=14,B=34,pw=W-L-R,ph=H-T-B;
+  const X=w=>L+w/24*pw,Y=p=>T+(1-p)*ph;
+  let cum=0,pts=[[0,0]],last=0;
+  WEEKS.forEach(w=>{cum+=sessions(w.n);pts.push([w.n,cum/120]);if(sessions(w.n))last=w.n});
+  const upto=Math.max(last,started()?Math.min(cur,24):0);
+  const line=pts.slice(0,upto+1);
+  let g="";
+  [0,.25,.5,.75,1].forEach(p=>{g+=`<line x1="${L}" x2="${W-R}" y1="${Y(p)}" y2="${Y(p)}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${Y(p)+4}" text-anchor="end" font-size="11" fill="var(--pencil)">${p*240} h</text>`});
+  for(let m=0;m<6;m++){g+=`<line x1="${X(m*4)}" x2="${X(m*4)}" y1="${T}" y2="${T+ph}" stroke="var(--line)" stroke-dasharray="2 4"/><text x="${X(m*4+2)}" y="${H-10}" text-anchor="middle" font-size="12" fill="var(--pencil)">Mois ${m+1}</text>`}
+  g+=`<line x1="${X(0)}" y1="${Y(0)}" x2="${X(24)}" y2="${Y(1)}" stroke="var(--pencil)" stroke-width="2" stroke-dasharray="6 5"/>`;
+  if(started()){g+=`<line x1="${X(cur)}" x2="${X(cur)}" y1="${T}" y2="${T+ph}" stroke="var(--mark)" stroke-width="3"/>`}
+  if(line.length>1){
+    const d=line.map((p,i)=>(i?"L":"M")+X(p[0]).toFixed(1)+" "+Y(p[1]).toFixed(1)).join(" ");
+    g+=`<path d="${d} L${X(line[line.length-1][0])} ${Y(0)} L${X(0)} ${Y(0)} Z" fill="var(--ok)" opacity=".16"/><path d="${d}" fill="none" stroke="var(--ok)" stroke-width="3.5" stroke-linejoin="round"/>`;
+    const e=line[line.length-1];g+=`<circle cx="${X(e[0])}" cy="${Y(e[1])}" r="5.5" fill="var(--ok)" stroke="var(--card)" stroke-width="2"/>`;
+  }
+  $("chart").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Courbe d’heures cumulées sur 24 semaines">${g}</svg>`;
+}
+
+function dayButtons(n,big){
+  const box=el("div",big?"daysbig":"days");
+  DAYS.forEach((d,i)=>{
+    const b=el("button","day"+(big?" big":""));b.type="button";
+    const on=!!(S.s[n]||[])[i];b.setAttribute("aria-pressed",on);
+    if(big){b.append(d[0]+" · "+d[1]);b.append(el("span",null,d[2]))}else{b.textContent=d[0];b.title=d[1]+" — "+d[2]}
+    b.onclick=()=>{const a=S.s[n]||[false,false,false,false,false];a[i]=!a[i];S.s[n]=a;save();render()};
+    box.append(b)});
+  return box;
+}
+function noteBlock(n){
+  const d=el("details","note");d.dataset.k="n"+n;if(open.has("n"+n)||S.notes[n])d.open=open.has("n"+n);
+  d.append(el("summary",null,S.notes[n]?"Notes (écrites)":"Notes de la semaine"));
+  const t=document.createElement("textarea");t.value=S.notes[n]||"";t.setAttribute("aria-label","Notes de la semaine "+n);
+  t.oninput=()=>{S.notes[n]=t.value;save()};
+  d.append(t);d.addEventListener("toggle",()=>{d.open?open.add("n"+n):open.delete("n"+n)});
+  return d;
+}
+
+function render(){
+  const cur=currentWeek();
+  const total=WEEKS.reduce((a,w)=>a+sessions(w.n),0),hours=total*2;
+  const doneW=WEEKS.filter(w=>sessions(w.n)===5).length;
+  const expected=started()?cur*5-(5-0):0; // séances attendues avant la semaine en cours
+  const behind=Math.max(0,(cur-1)*5-total), ahead=Math.max(0,total-(cur*5));
+  chart(cur);
+  $("stats").innerHTML="";
+  [[hours+" h","sur 240"],[doneW+"/24","semaines terminées"],[Math.round(total/120*100)+" %","du programme"]].forEach(([a,b])=>{const s=el("span");s.append(el("b",null,a),b);$("stats").append(s)});
+  $("gap").textContent=!started()?"Le programme commence le "+new Date(S.start+"T00:00:00").toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})+".":behind?`Retard : ${behind} séance${behind>1?"s":""} (${behind*2} h) à rattraper le week-end.`:ahead?`Avance : ${ahead} séance${ahead>1?"s":""}.`:"Tu es dans le rythme.";
+
+  // cette semaine
+  const t=$("today");t.innerHTML="";
+  const w=WEEKS[cur-1];
+  t.append(el("h3",null,"Semaine "+cur+" sur 24 — "+w.t));
+  t.append(dayButtons(cur,true));t.append(noteBlock(cur));
+
+  // mois
+  const M=$("months");M.innerHTML="";
+  MONTHS.forEach((m,mi)=>{
+    const c=el("div","month");
+    const done=m.w.reduce((a,x)=>a+sessions(x[0]),0);
+    const h=el("header");h.append(el("h3",null,m.t));
+    const me=el("div","meter");const bar=el("div","bar");const fill=el("i");fill.style.width=(done/20*100)+"%";bar.append(fill);me.append(done+"/20 séances",bar);h.append(me);c.append(h);
+    const dv=el("div","deliv");const lb=el("label");const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!S.mdone[mi];
+    cb.onchange=()=>{S.mdone[mi]=cb.checked;save()};
+    const sp=el("span");sp.append(el("b",null,"Livrable : "),m.d);lb.append(cb,sp);dv.append(lb);c.append(dv);
+    m.w.forEach(([n,tt])=>{
+      const r=el("div","week"+(n===cur&&started()?" current":""));
+      const row=el("div","wrow");const ti=el("div","wtitle");ti.append("Semaine "+n+" — "+tt);ti.append(el("small",null,sessions(n)+"/5 séances"));
+      row.append(ti,dayButtons(n,false));r.append(row,noteBlock(n+"_m"));c.append(r);
+    });
+    M.append(c);
+  });
+  // notes des semaines : clé distincte pour éviter doublon avec le bloc « cette semaine »
+  document.querySelectorAll(".week details.note").forEach(d=>{
+    const n=d.dataset.k.replace("n","").replace("_m","");const ta=d.querySelector("textarea");
+    ta.value=S.notes[n]||"";ta.oninput=()=>{S.notes[n]=ta.value;save()};
+    d.querySelector("summary").textContent=S.notes[n]?"Notes (écrites)":"Notes de la semaine";
+  });
+
+  // projets
+  const P=$("projects");P.innerHTML="";
+  PROJECTS.forEach(([id,t,s])=>{
+    const b=el("div","box proj");const l=el("label","t");const cb=document.createElement("input");cb.type="checkbox";cb.checked=!!(S.proj[id]||{}).done;
+    cb.onchange=()=>{S.proj[id]=Object.assign(S.proj[id]||{},{done:cb.checked});save()};
+    const sp=el("span");sp.append(t);sp.append(el("small",null,s));l.append(cb,sp);
+    const u=document.createElement("input");u.type="url";u.placeholder="Lien du dépôt GitHub";u.setAttribute("aria-label","Lien GitHub : "+t);u.value=(S.proj[id]||{}).url||"";
+    u.oninput=()=>{S.proj[id]=Object.assign(S.proj[id]||{},{url:u.value});save()};
+    b.append(l,u);P.append(b)});
+
+  checklist($("final"),FINAL,"final");checklist($("dossierList"),DOSSIER,"dossier");
+  errs();
+  $("start").value=S.start;
+  const sc=$("sched");sc.innerHTML="";
+  DAYS.forEach(d=>{const tr=el("tr");tr.append(el("td",null,["Lundi","Mardi","Mercredi","Jeudi","Vendredi"][DAYS.indexOf(d)]),el("td",null,d[1]+" — "+d[2]),el("td",null,"2 h"));sc.append(tr)});
+}
+function checklist(box,items,key){
+  box.innerHTML="";
+  items.forEach((t,i)=>{const l=el("label",S[key][i]?"done":"");const c=document.createElement("input");c.type="checkbox";c.checked=!!S[key][i];
+    c.onchange=()=>{S[key][i]=c.checked;save();l.className=c.checked?"done":""};
+    l.append(c,el("span",null,t));box.append(l)});
+}
+function errs(){
+  const L=$("errList");L.innerHTML="";
+  if(!S.errs.length){L.append(el("p","empty","Aucune entrée. Note la première notion qui te résiste."));return}
+  S.errs.slice().reverse().forEach(e=>{
+    const r=el("div","err"+(e.done?" done":""));const c=document.createElement("input");c.type="checkbox";c.checked=e.done;c.setAttribute("aria-label","Notion maîtrisée");
+    c.onchange=()=>{e.done=c.checked;save();errs()};
+    const tx=el("div","txt");tx.append(e.text);tx.append(el("small",null,"Semaine "+e.w+" · "+e.date));
+    const x=el("button","x","×");x.type="button";x.setAttribute("aria-label","Supprimer");x.onclick=()=>{S.errs=S.errs.filter(z=>z!==e);save();errs()};
+    r.append(c,tx,x);L.append(r)});
+}
+function addErr(){
+  const v=$("errIn").value.trim();if(!v)return;
+  S.errs.push({text:v,done:false,w:currentWeek(),date:new Date().toLocaleDateString("fr-FR")});
+  $("errIn").value="";save();errs();
+}
+$("errAdd").onclick=addErr;$("errIn").onkeydown=e=>{if(e.key==="Enter")addErr()};
+$("start").onchange=e=>{if(e.target.value){S.start=e.target.value;save();render()}};
+$("exp").onclick=()=>{const a=el("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,2)],{type:"application/json"}));a.download="suivi-ia-"+iso(new Date())+".json";a.click()};
+$("impBtn").onclick=()=>$("imp").click();
+$("imp").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{S=Object.assign(fresh(),JSON.parse(r.result));save();render()}catch(x){alert("Fichier invalide : impossible de lire ce JSON.")}};r.readAsText(f)};
+$("reset").onclick=()=>{if(confirm("Effacer toute ta progression ? Action irréversible.")){S=fresh();save();render()}};
+render();
+</script>
+</body>
+</html>
